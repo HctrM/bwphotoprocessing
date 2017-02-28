@@ -2,7 +2,7 @@
 """
 Éditeur de Spyder
 
-Par Hector MISSIAEN
+Par Hector M.
 """
 import Tkinter as Tk
 from PIL import Image, ImageTk
