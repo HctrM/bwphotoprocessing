@@ -95,78 +95,83 @@ class cImage:
         #variance
         if self.histoL == []:
             self.histogramme()
-        sEntropie = self.seuillageEntropie(self.histoL)
-        sVariance = self.seuillageVariance(s, self.histoL, 0)
-        print sEntropie,sVariance
+        sEntropie = self.seuillageEntropie()
+        sVariance = self.seuillageVariance(s)
+        
         return 
     
-    def seuillageEntropie(self, histoL):
+    def seuillageEntropie(self):
         s = 0    
-        
-        for s in range(0,255):    
-            for i in range(0, len(histoL)): #get number of pixels and weighted average before and after the ceiling
-                nbPixelsBefore = 0
-                nbPixelsAfter = 0
-                moyBefore = 0
-                moyAfter = 0
-                while i <= s:
-                    nbPixelsBefore += histoL[i]
-                    moyBefore += i*histoL[i]
-                else : 
-                    nbPixelsAfter += histoL[i]
-                    moyAfter += (i*histoL[i]) 
-                -(nbPixelsBefore)*math.log(nbPixelsBefore)
-        
-    def seuillageVariance(self, s, histoL, x):
-        nbPixelsBefore = 0
-        nbPixelsAfter = 0
-        moyBefore = 0
-        moyAfter = 0
-        for i in range(0, len(histoL)): #get number of pixels and weighted average before and after the ceiling
-            while i <= s:
-                nbPixelsBefore += histoL[i]
-                moyBefore += (i+x)*histoL[i]
-            else : 
-                nbPixelsAfter += histoL[i]
-                moyAfter += (i+x)*histoL[i]
-        moyBefore /= nbPixelsBefore
-        print moyBefore
-        moyAfter /= nbPixelsAfter
-        print moyAfter
-        if s == abs(moyBefore + moyAfter)//2 :
-            return s
-        else:
-            if abs(moyBefore + moyAfter)//2 > s:
-                histoL = histoL[:s]
-                x = s + len(histoL)
-                s = s + len(histoL)/2
-                print s
-                self.seuillageVariance(s, histoL, x)
-            else: 
-                x= s
-                histoL = histoL[s:]
-                s = s - len(histoL)/2
-                print s
-                self.seuillageVariance(s, histoL, x)
+        entropyMax = 0
+        for s in range(0,255): 
+            nbPixelsBefore = 0   
+            nbPixelsAfter = 0    
+            
+            for i in range(0, len(self.histoL)): #get number of pixels and weighted average before and after the ceiling
+                if i <= s:
+                    nbPixelsBefore += self.histoL[i]                    
+                else:
+                    nbPixelsAfter += self.histoL[i]                    
+            for i in range(0, len(self.histoL)):
+                entropy = 0
+                if i <= s:                
+                    if self.histoL[i] != 0 and nbPixelsBefore != 0:
+                        hMoy= float(self.histoL[i])/nbPixelsBefore
+                        entropy -=  (hMoy)*math.log(hMoy)
+                else :
+                    if self.histoL[i] != 0 and nbPixelsAfter != 0:
+                        hMoy = float(self.histoL[i])/nbPixelsAfter
+                        entropy -= (hMoy)*math.log(hMoy)
+           
+            if entropy >= entropyMax : 
+                indexEntropy= s
+                entropyMax = entropy
                 
+        return indexEntropy
+        
+    def seuillageVariance(self, s):  
+        it = 2
+        while it <= 256 : 
+            nbPixelsBefore = 0
+            nbPixelsAfter = 0
+            moyAfter = 0
+            moyBefore = 0
+            it *= 2
+            for i in range(0, len(self.histoL)): #get number of pixels and weighted average before and after the ceiling
+                if i <= s:
+                    nbPixelsBefore += self.histoL[i]
+                    moyBefore += i*self.histoL[i]
+                else : 
+                    nbPixelsAfter += self.histoL[i]
+                    moyAfter += i*self.histoL[i]
+            moyBefore /= nbPixelsBefore #weighted average
+            print moyBefore
+            moyAfter /= nbPixelsAfter
+            print moyAfter
+            if abs(moyBefore + moyAfter)//2 > s: #dichotomy process : if threshold is below average of both, set threshold to be in the right set of histogram
+                s += len(self.histoL)//it
+                print "On augmente s vers : "
+                print s
+            else:
+                s -= len(self.histoL)//it #dichotomy : if threshold is above average of both, set threshold to be in the left set of 
+                print "On diminue s vers : "
+                print s
+        return s
+        
+        
         #3 classes
 
-    def histo(self,k):
-        count = 0
-        for i in range(1,len(self.pixels)): #iterating on lines
-            for j in range(1,len(self.pixels[0])): #iterating on columns
-                if self.pixels[i][j] == k:
-                    count += 1
-        return count
     
     def histogramme(self):
         histoI = [0]
         for i in range(0,255):
             histoI.append(histoI[-1]+1)
         self.histoL = [0] * 256
-        for i in range(0,255):
-            print i
-            self.histoL[i] = self.histo(i)
+        for k in histoI:
+            for i in range(1,len(self.pixels)): #iterating on lines
+                for j in range(1,len(self.pixels[0])): #iterating on columns
+                    if self.pixels[i][j] == k:
+                        self.histoL[k] +=1
         plt.plot(histoI, self.histoL, "g")
         
     def imageSave(self):
@@ -222,7 +227,7 @@ class App:
         valider.grid(column=0,row=0,padx=5, pady=5)
         
         #canvas for image printing
-        self.zoneDess=Tk.Canvas(master,height = self.h,width = self.w, bg="grey")
+        self.zoneDess=Tk.Canvas(master,height = self.h,width = self.w, bg="black")
         self.zoneDess.grid(column = 1, row = 1, rowspan = 4, sticky = "ne")
         
         #menu bar at top of window
