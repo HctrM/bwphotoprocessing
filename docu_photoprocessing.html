@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<style>
+	body{font-family: arial; font-size:20px;background-color: #616161}
+	#bout{color:#007109;font-style:italic;}
+	a{text-decoration: none;color:black;}
+	a:hover{background-color:white; padding:15px;}
+	il{padding:15px;}
+	table{border-collapse: collapse;margin:0 auto}
+	td, th{border: 1px solid black; width:20px; height:20px; background-color:white;margin:0 auto }
+	</style>
+</head>
+
+<body>
+<h1 class="title" style = >Logiciel de retouche de photos en nuances de gris</h1>
+<h2 style="font-style:italic;color:#adadad;"> par Hector MISSIAEN </h2>
+<ul style="font-size: 20px; width:800px;margin:0 auto; background-color:gray; padding: 15px;">
+	<il><a href="#intro">Introduction</a><il>
+	<il><a href="#fonctionnalites">Fonctionnalités</a></il>
+	<il><a href="#annexe">Annexe</a></il>
+</ul>
+<div style="background-color:#adadad;width:800px;margin:0 auto; padding:5px">
+<h2 style="width:800px;margin:0 auto; padding:15px" id="intro"><strong>I-</strong>Introduction</h2>
+<div style="width:800px;margin:0 auto"> L'objectif du projet d'informatique de SPE était de réaliser un programme prenant en entrée une image en noir et blanc et de réaliser divers traitements comme des filtrages spatiaux (Prewitt, Laplacien, Moyen, Médian) mais aussi des modifications de l'image, en négatif et des rotations. Des fonctions de seuillages sont égalements intégrées.
+</div>
+
+<h2 style="width:800px;margin:0 auto; padding:15px" id="fonctionnalites"><strong>II-</strong>Fonctionnalités</h2>
+<div style="width:800px;margin:0 auto">
+<ul>
+	<li>
+		<div><strong>Démarrage - Ouverture de l'image:</strong> </br>Fichier -> Ouvrir : séléction de l'image dans l'arborescence de l'ordinateur. Types de fichiers utilisables : .gif, .jpg, .png.</br> Une image en nuances de gris s'affichera sur le Canvas de l'application ainsi qu'une copie de cette image correspondant à la version éditable de l'image.</div>
+	</li>
+	<li>
+		<div><strong>Onglets - Filtrage:</strong> </br>Sélectionner un des filtres suivants à partir du menu déroulant: Moyen, Gaussien, Prewitt, Laplacien ou Négatif. Chacun de ces filtres correspond à un filtrage spatial de l'image, c'est à dire à l'application d'une matrice "masque" à la matrice de pixels correspondant à l'image. On applique le filtre sélectionner en cliquant sur le bouton <span id="bout">Appliquer filtre</span><div>
+		<div><strong>Onglet - Crée ton filtre:</strong> </br>Permet à l'utilisateur de crée sa propre matrice 3x3 masque afin de créer un l'effet de flou voulu par l'utilisateur. La fonction consiste à associer à chaque pixel de la matrice un coefficient qui sera l'intensité du pixel dans le filtrage sachant que le pixel modifié sera le pixel central. On incrémente de 1 la valeur du coefficient voulu en cliquant avec le clic gauche de la souris et un Shift-Click l'augment de 20. De même, un clic droit enlève 1 et un Shift-Click droit enlève 20. On applique le filtre avec le bouton <span id="bout">Ok</span> et on réinitialise la matrice avec le bouton <span id="bout">Reset</span></div>
+		<div><strong>Onglet - Seuillage:</strong> </br>Cette section permet d'appliquer un algorithme de seuillage à l'image. C'est à dire, un parcours des valeurs de pixels de la matrice et si la valeur du pixel est supérieur alors on change la valeur du pixel à 255 et à 0 si elle est inférieur.</br> On dispose de plusieurs méthodes pour appliquer le seuillage :</br>   - Le seuillage manuel qui utilise la valeur de seuil fournit par l'utilisateur via le curseur. On applique le seuillage via le bouton <span id="bout">Seuillage</span> </br> - Le seuillage automatique permet à partir de 3 méthodes différentes d'obtenir une valeur de seuil à partir soit d'une maximisation de l'entropie, d'une méthode de dichotomie par variance, et une méthode par classe (non implémentée). Le seuillage automatique par variance est appliqué avec le bouton <span id="bout">Variance</span> et le seuillage par entropie avec le bouton <span id="bout">Entropie</span>. Les seuils calculés par ces méthodes sont affichés sur la colonne adjacente à ces deux boutons</div>
+		<div><strong>Onglet - Modifications géométriques:</strong> </br>Permet la rotation de l'image à 90° à gauche avec le bouton <span id="bout">90° gauche</span>. La rotation à droite et à 180° se fait via le bouton <span id="bout">90° droite</span>.</div>On peut également réaliser une symétrie horizontale avec le bouton <span id="bout">Symétrie horizontale</span> et la symétrie verticale avec le bouton <span id="bout">Symétrie verticale</span>
+		<div><strong>Onglet - Modifier l'image:</strong> </br>Contient les deux boutons <span id="bout">Valider</span> et <span id="bout">Annuler</span>. Le premier permet d'importer les modifications faites sur l'image principale à partir de l'image modifiable. Le second permet lui d'annuler l'action précédente ou de revenir à l'image principale.</div>
+	</li>
+</ul>
+<h2 style="width:800px;margin:0 auto; padding:15px" id="annexe"><strong>III-</strong>Annexe</h2>
+<div style="width:800px;margin:0 auto; padding-bottom:20%">
+Dans la barre de menu: </br>
+Il est possible de sauvegarder l'image via le bouton <span id="bout">Enregistrer sous</span>. Cet action sauvegardera l'image de gauche, il ne faut donc pas oublier d'appuyer sur le bouton <span id="bout">Valider</span> avant d'enregistrer</br>
+Cette documentation est accessible avec le bouton <span id="bout">Documentation</span></br>
+Un clic droit sur le canvas permet de créer un histogramme de l'image correspondant à la population de pixels en fonction de l'intensité. </br>
+Si l'image importé est en couleur, le programme se chargera de la convertir en niveaux de gris, afin de pouvoir apporter des modifications.
+</div>
+<div> Filtres spatiaux proposés à essayer : </br>
+Renforcement des bords:
+<table>
+   <tr>
+       <td>0</td>
+       <td>0</td>
+       <td>0</td>
+   </tr>
+
+   <tr>
+       <td>-1</td>
+       <td>1</td>
+       <td>0</td>
+   </tr>
+   <tr>
+       <td>0</td>
+       <td>0</td>
+       <td>0</td>
+   </tr>
+</table>
+Repoussage:
+<table>
+   <tr>
+       <td>-2</td>
+       <td>-1</td>
+       <td>0</td>
+   </tr>
+
+   <tr>
+       <td>-1</td>
+       <td>1</td>
+       <td>1</td>
+   </tr>
+   <tr>
+       <td>0</td>
+       <td>1</td>
+       <td>2</td>
+   </tr>
+</table>
+Augmentation du contraste:
+<table>
+   <tr>
+       <td>0</td>
+       <td>-1</td>
+       <td>0</td>
+   </tr>
+
+   <tr>
+       <td>-1</td>
+       <td>5</td>
+       <td>-1</td>
+   </tr>
+   <tr>
+       <td>0</td>
+       <td>-1</td>
+       <td>0</td>
+   </tr>
+</table>
+
+</div>
+<div style="font-size:10px;">
+	MISSIAEN Hector
+<div>
+</div>
+</body>
+</html>
