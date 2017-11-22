@@ -23,7 +23,9 @@ class cImage:
         self.ouvert = False
         self.histoL = []
         self.sEntropie=0
-        self.sVariance=0   
+        self.sVariance=0
+        self.Entropie=0
+        
     def ouvrir(self, nb = False):
         
         largeur = 400
